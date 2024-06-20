@@ -39,3 +39,11 @@ h1, h2, h3, b, input {
 	color: var(--points);
 	text-shadow: 0 0 10px var(--points);
 }
+
+/*Custom additions*/
+.upghdr {
+	position: absolute;
+	top: 0;
+	left:0;
+	width:100%;
+}

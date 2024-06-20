@@ -2,8 +2,8 @@ let modInfo = {
 	name: "The ??? Tree",
 	id: "mymod",
 	author: "nobody",
-	pointsName: "points",
-	modFiles: ["layers.js", "tree.js"],
+	pointsName: "quantum fluctuations",
+	modFiles: ["layers/layers.js", "tree.js"],
 
 	discordName: "",
 	discordLink: "",
@@ -34,7 +34,7 @@ function getStartPoints(){
 
 // Determines if it should show points/sec
 function canGenPoints(){
-	return true
+	return hasUpgrade("QFoam", 11)
 }
 
 // Calculate points/sec!
@@ -42,7 +42,43 @@ function getPointGen() {
 	if(!canGenPoints())
 		return new Decimal(0)
 
-	let gain = new Decimal(1)
+	let gain = upgradeEffect("QFoam", 11)
+
+	// If player has "Gather More" and "'Gather More' and smarter"
+	if (hasUpgrade("QFoam", 16) && hasUpgrade("QFoam", 14))
+		gain = gain.add(upgradeEffect("QFoam", 14))
+
+	
+	if (hasUpgrade("QFoam", 22))
+		gain = gain.add(upgradeEffect("QFoam", 22))
+
+	// End of base gain
+	// Anything after this comment should not be considered a 'base gain' boost
+
+	if (hasUpgrade("QFoam", 12))
+		gain = gain.mul(upgradeEffect("QFoam", 12))
+	if (hasUpgrade("QFoam", 13))
+		gain = gain.mul(upgradeEffect("QFoam", 13))
+	
+	// If player only has "Gather More"
+	if (!hasUpgrade("QFoam", 16) && hasUpgrade("QFoam", 14))
+		gain = gain.add(upgradeEffect("QFoam", 14))
+	
+	if (hasUpgrade("QFoam", 15))
+		gain = gain.mul(upgradeEffect("QFoam", 15))
+
+	if (hasUpgrade("QFoam", 23))
+		gain = gain.mul(upgradeEffect("QFoam", 23))
+	if (hasUpgrade("QFoam", 24))
+		gain = gain.mul(upgradeEffect("QFoam", 24))
+	if (hasUpgrade("QFoam", 26))
+		gain = gain.mul(upgradeEffect("QFoam", 26))
+	
+	
+	gain = gain.mul(buyableEffect("QFoam", 11))
+
+	
+
 	return gain
 }
 

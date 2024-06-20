@@ -383,13 +383,15 @@ function gameLoop(diff) {
 
 }
 
-function hardReset(resetOptions) {
-	if (!confirm("Are you sure you want to do this? You will lose all your progress!")) return
+function hardReset(resetOptions, force = false) {
+	if (!force && !confirm("Are you sure you want to do this? You will lose all your progress!")) return
 	player = null
 	if(resetOptions) options = null
 	save(true);
 	window.location.reload();
 }
+
+const forcedHardReset = () => hardReset(null, true)
 
 var ticking = false
 

@@ -73,3 +73,41 @@ function achievementEffect(layer, id) {
 function gridEffect(layer, id) {
 	return (gridRun(layer, 'getEffect', player[layer].grid[id], id))
 }
+
+// Custom additions
+function ezEffectDisplay(layer, id, prefix = '', suffix = '') {
+	return prefix + format(upgradeEffect(layer, id)) + suffix
+}
+
+
+function ezBuyableEffectDisplay(layer, id, prefix = '', suffix = '') {
+	return "Currently: " + prefix + format(buyableEffect(layer, id)) + suffix
+}
+
+
+function ezBuyableCostDisplay(layer, id) {
+	return "Next: " + format(layers[layer].buyables[id].cost(getBuyableAmount(layer, id))) + " " + layers[layer].baseResource
+}
+
+function getUpgradeCount(layer) {
+	return player[layer].upgrades.length
+}
+
+/**
+ * Use it for tooltips since it returns an HTML Element
+ * @param {string} layer 
+ * @param {number} id 
+ */
+function getAffectedUpgrade(layer, id) {
+	return (
+		`Affecting:<h2>
+		${layers[layer].upgrades[id].title}
+		</h2></br>
+		( upg ${layer}${id} )`
+	)
+}
+
+// Defualt implementation of the gain per second for layers
+function defaultGPS(layer) {
+	return format(tmp[layer].resetGain.div(player[layer].resetTime))
+}
