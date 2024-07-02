@@ -383,7 +383,7 @@ function gameLoop(diff) {
 
 }
 
-function hardReset(resetOptions, force = false) {
+function hardReset(resetOptions, force = true) {
 	if (!force && !confirm("Are you sure you want to do this? You will lose all your progress!")) return
 	player = null
 	if(resetOptions) options = null

@@ -3,7 +3,7 @@ let modInfo = {
 	id: "mymod",
 	author: "nobody",
 	pointsName: "quantum fluctuations",
-	modFiles: ["layers/layers.js", "tree.js"],
+	modFiles: ["layers/l_qfoam.js", "layers/l_space.js", "layers/achievements.js", "tree.js"],
 
 	discordName: "",
 	discordLink: "",
@@ -13,14 +13,17 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.0",
-	name: "Literally nothing",
+	num: "24w07a",
+	name: "Foamy Layer",
 }
 
-let changelog = `<h1>Changelog:</h1><br>
-	<h3>v0.0</h3><br>
-		- Added things.<br>
-		- Added stuff.`
+let changelog = `<h1>Changelog:</h1><br><br>
+	<h3>24w07a (Foamy Layer)</h3><br>
+		- Added quantum foam (QFoam).<br>
+		- Added 3 upgrade rows in QFoam.<br>
+		- Added 2 buyables in QFoam.<br>
+		- Added Achievements + some achs.<br>
+		- No endgame yet. (I barely started on this mod)<br>`
 
 let winText = `Congratulations! You have reached the end and beaten this game, but for now...`
 
@@ -76,6 +79,10 @@ function getPointGen() {
 	
 	
 	gain = gain.mul(buyableEffect("QFoam", 11))
+
+	if (hasUpgrade("QFoam", 33))
+		gain = gain.pow(upgradeEffect("QFoam", 33))
+	
 
 	
 

@@ -78,6 +78,9 @@ function gridEffect(layer, id) {
 function ezEffectDisplay(layer, id, prefix = '', suffix = '') {
 	return prefix + format(upgradeEffect(layer, id)) + suffix
 }
+function ezLayerEffectDisplay(layer, prefix = '', suffix = '') {
+	return prefix + format(layers[layer].effect()) + suffix
+}
 
 
 function ezBuyableEffectDisplay(layer, id, prefix = '', suffix = '') {
@@ -86,7 +89,7 @@ function ezBuyableEffectDisplay(layer, id, prefix = '', suffix = '') {
 
 
 function ezBuyableCostDisplay(layer, id) {
-	return "Next: " + format(layers[layer].buyables[id].cost(getBuyableAmount(layer, id))) + " " + layers[layer].baseResource
+	return "Next at: " + format(layers[layer].buyables[id].cost(getBuyableAmount(layer, id))) + " " + layers[layer].baseResource
 }
 
 function getUpgradeCount(layer) {
@@ -110,4 +113,31 @@ function getAffectedUpgrade(layer, id) {
 // Defualt implementation of the gain per second for layers
 function defaultGPS(layer) {
 	return format(tmp[layer].resetGain.div(player[layer].resetTime))
+}
+
+
+// [NYI] A more accurate (and expensive) GPS implementation
+function accurateGPS(layer) {
+	return format(tmp[layer].resetGain.div(player[layer].resetTime))
+}
+
+// Easy access of an upgrade's data
+function getUpgradeData(layer, id) {
+	return layers[layer].upgrades[id]
+}
+
+/**
+ * Honestly, why did I add Set notation in this mod...
+ * @param {any[Formatable]} lower
+ * @param {any[Formatable]} upper
+ * @param {boolean} include_lower
+ * @param {boolean} include_upper
+ * 
+*/
+function displayDefiniteSet(lower, upper, include_lower = true, include_upper = true) {
+	return `${include_lower ? '[': ']'}${format(lower)};${format(upper)}${include_upper ? ']': '['}`
+}
+
+function getLayerColor(layer) {
+	return layers[layer].color
 }

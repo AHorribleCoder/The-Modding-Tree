@@ -20,8 +20,22 @@ addLayer("QFoam", {
 		mult = mult.mul(upgradeEffect("QFoam", 21))
 	if (hasUpgrade("QFoam", 25))
 		mult = mult.mul(upgradeEffect("QFoam", 25))
+
+	
+	if (hasUpgrade("QFoam", 32))
+		mult = mult.mul(upgradeEffect("QFoam", 32))
+	
+	mult = mult.mul(buyableEffect("QFoam", 12))
+
+	
+	if (hasUpgrade("QFoam", 34))
+		mult = mult.mul(upgradeEffect("QFoam", 34))
+	
+	if (hasUpgrade("QFoam", 35))
+		mult = mult.mul(upgradeEffect("QFoam", 35))
 	
 	
+	mult = mult.mul(layers["Space"].effect())
 	
 		return mult
 	},
@@ -30,7 +44,7 @@ addLayer("QFoam", {
 	},
 	row: 0, // Row the layer is in on the tree (0 is the first row)
 	hotkeys: [
-		{key: "p", description: "P: Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+		{key: "q", description: "Q: Reset for quantum foam", onPress(){if (canReset(this.layer)) triedtoQFoamReset++}},
 	],
 	upgrades: {
 		11: {
@@ -52,6 +66,7 @@ addLayer("QFoam", {
 		13: {
 			title: "Exerciing Yourself",
 			description: "Unspent QFoam boost QFluc.",
+			tooltip: "No, I wont fix this typo",
 			cost: new Decimal(5),
 			canAfford() { return hasUpgrade(this.layer, 11) },
 			effect() { return new Decimal(player[this.layer].points).add(1).sqrt() },
@@ -82,7 +97,7 @@ addLayer("QFoam", {
 			cost: new Decimal(60),
 			canAfford() { return hasUpgrade(this.layer, 14) },
 			unlocked: true,
-			tooltip: null //Check line 111
+			tooltip() {return getAffectedUpgrade("QFoam", 14)}
 		},
 		21: {
 			title: "A New Row??",
@@ -93,14 +108,14 @@ addLayer("QFoam", {
 		},
 		22: {
 			title: "Fun Fact",
-			description: "Quantum fluctuation and foam are somewhat representing the same thing and yet, they are different in this mod.</br>Anyway, here's another boost.</br> +0.5 base QFluc",
+			description: "Quantum fluctuation and foam are somewhat representing the same thing and yet, they are different in this mod.</br>Anyway, here's another boost.</br> +1.5 base QFluc",
 			cost: new Decimal(300),
 			effect() { return new Decimal(1.5) },
 			unlocked() { return hasUpgrade(this.layer, 16) },
 		},
 		23: {
 			title: "Fluctuatin'",
-			description: "Gain a oscillating boost to QFluc Rx with R\u2208[1;2]",
+			description: `Gain a oscillating boost to QFluc Rx with R\u2208${displayDefiniteSet(1, 2)}`,
 			cost: new Decimal(1000),
 			effect() { return new Decimal(Math.sin(player.time / 12000.0) * 0.5 + 1.5) },
 			effectDisplay() {return ezEffectDisplay(this.layer, this.id, '', 'x', false)},
@@ -116,9 +131,9 @@ addLayer("QFoam", {
 		},
 		25: {
 			title: "Order From Disroder",
-			description: "Each upgrade bought in QFoam boosts QFoam gain by 1.025x.",
-			cost: new Decimal(2000),
-			effect() { return new Decimal(1.025).pow(getUpgradeCount(this.layer)) },
+			description: "Each upgrade bought in QFoam boosts QFoam gain by 1.1x.",
+			cost: new Decimal(5000),
+			effect() { return new Decimal(1.1).pow(getUpgradeCount(this.layer)) },
 			effectDisplay() {return ezEffectDisplay(this.layer, this.id, '', 'x', false)},
 			unlocked() { return hasUpgrade(this.layer, 16) },
 		},
@@ -138,19 +153,81 @@ addLayer("QFoam", {
 			effectDisplay() {return this.effect()},
 			unlocked() { return hasUpgrade(this.layer, 26) },
 		},
+		32: {
+			title: "Weak Buyable Synergy",
+			description: "Each 'Multi-Fluctuations' bought boosts QFoam gain by 1.025.",
+			cost: new Decimal(5e8),
+			effect() { return new Decimal(1.025).pow(getBuyableAmount(this.layer, 11)) },
+			effectDisplay() {return ezEffectDisplay(this.layer, this.id, '', 'x')},
+			unlocked() { return hasUpgrade(this.layer, 26) },
+		},
+		33: {
+			title: "Exponential Fluctuations",
+			description: "As the name suggests, raises QFluc gain by ^1.25",
+			cost: new Decimal(1e10),
+			effect() { return new Decimal(1.25) },
+			unlocked() { return hasUpgrade(this.layer, 26) },
+		},
+		34: {
+			title: "New Layer Soon&trade;",
+			description: "Don't worry, it's not far away.</br>Double QFluc gain for every upgrade bought.",
+			cost: new Decimal(2.5e18),
+			effect() { return new Decimal(2).pow(getUpgradeCount(this.layer)) },
+			effectDisplay() {return ezEffectDisplay(this.layer, this.id, '', 'x')},
+			unlocked() { return hasUpgrade(this.layer, 26) },
+		},
+		35: {
+			title: "Final Stretch",
+			description: "QFoam boosts itself again.</br>You're so close!",
+			cost: new Decimal(1e48),
+			effect() {return player[this.layer].points.log10().mul(2)},
+			effectDisplay() {return ezEffectDisplay(this.layer, this.id, '', 'x')},
+			unlocked() { return player[this.layer].points.gte(1e40) }
+		},
+		36: {
+			title: "New Layer!",
+			description: "Gain access to the next layer!</br>(Permanent)",
+			cost: new Decimal(1e78),
+			unlocked() { return player[this.layer].points.gte(1e72) || hasUpgrade(this.layer, this.id) },
+		},
 	},
 	buyables: {
 		11: {
 			title: "Multi-Fluctuations",
-			cost(x) { return x.add(1).pow(2).mul(1e8) },
-			display() { return "QFluc generation generates more QFluc than before.</br></br>Bought: " + getBuyableAmount(this.layer, this.id) + "</br>" + ezBuyableEffectDisplay(this.layer, this.id, '', 'x QFluc') + "</br></br>" + ezBuyableCostDisplay(this.layer, this.id)},
+			cost(x) { return new Decimal(2.2).pow(x).mul(1e7) }, // Cost starts at 1e7, scale: exp
+			display() { return "Multiply QFluc gain by 1.5x.</br></br>Bought: " + getBuyableAmount(this.layer, this.id) + "</br>" + ezBuyableEffectDisplay(this.layer, this.id, '', 'x QFluc') + "</br></br>" + ezBuyableCostDisplay(this.layer, this.id)},
 			effect(x) { return new Decimal(1.5).pow(x) },
 			canAfford() { return player[this.layer].points.gte(this.cost()) },
 			buy() {
 				player[this.layer].points = player[this.layer].points.sub(this.cost())
 				setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
 			}
-		}
+		},
+		12: {
+			title: "More Foams",
+			cost(x) { return new Decimal(2.5).pow(x).mul(1e16) }, // Cost starts at 3e7, scale: exp
+			display() { return "Multiply QFoam gain by 1.2x.</br></br>Bought: " + getBuyableAmount(this.layer, this.id) + "</br>" + ezBuyableEffectDisplay(this.layer, this.id, '', 'x QFoam') + "</br></br>" + ezBuyableCostDisplay(this.layer, this.id)},
+			effect(x) { return new Decimal(1.2).pow(x) },
+			canAfford() { return player[this.layer].points.gte(this.cost()) },
+			buy() {
+				player[this.layer].points = player[this.layer].points.sub(this.cost())
+				setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+			},
+			unlocked() { return getBuyableAmount(this.layer, 11) >= 24 }
+		},
+	},
+	bars: {
+		test: {
+			direction: RIGHT,
+			width: 750,
+			height: 20,
+			progress() { return (player[this.layer].points.log(10).div(78))},
+			unlocked() {return hasUpgrade(this.layer, 35)},
+			display() {return `${format(player[this.layer].points.log(10))} / ${78} OOM of ${layers[this.layer].resource} for next layer`},
+			textStyle: {"color": () => {return layers["QFoam"].color}},
+			baseStyle: {"background-color": () => {return layers["QFoam"].color}},
+			fillStyle: {"background-color": () => {return layers["Space"].color}},
+		},
 	},
 	tabFormat: {
 		"Upgrades": {
@@ -158,6 +235,7 @@ addLayer("QFoam", {
 				"main-display",
 				"prestige-button",
 				"resource-display",
+				["bar", "test"],
 				"blank",
 				"upgrades"
 			],
@@ -176,4 +254,5 @@ addLayer("QFoam", {
 	layerShown(){return true}
 })
 
-layers["QFoam"].upgrades[16].tooltip = getAffectedUpgrade("QFoam", 14)
+
+
