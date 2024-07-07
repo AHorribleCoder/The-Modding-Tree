@@ -116,7 +116,7 @@ addLayer("QFoam", {
 		23: {
 			title: "Fluctuatin'",
 			description: `Gain a oscillating boost to QFluc Rx with R\u2208${displayDefiniteSet(1, 2)}`,
-			cost: new Decimal(1000),
+			cost: new Decimal(500),
 			effect() { return new Decimal(Math.sin(player.time / 12000.0) * 0.5 + 1.5) },
 			effectDisplay() {return ezEffectDisplay(this.layer, this.id, '', 'x', false)},
 			unlocked() { return hasUpgrade(this.layer, 16) },
@@ -124,7 +124,7 @@ addLayer("QFoam", {
 		24: {
 			title: "I heard you like fluctuations",
 			description: "QFluc boosts itself.",
-			cost: new Decimal(2000),
+			cost: new Decimal(1000),
 			effect() { return player.points.add(1).log10().add(1) },
 			effectDisplay() {return ezEffectDisplay(this.layer, this.id, '', 'x', false)},
 			unlocked() { return hasUpgrade(this.layer, 16) },
@@ -132,7 +132,7 @@ addLayer("QFoam", {
 		25: {
 			title: "Order From Disroder",
 			description: "Each upgrade bought in QFoam boosts QFoam gain by 1.1x.",
-			cost: new Decimal(5000),
+			cost: new Decimal(2500),
 			effect() { return new Decimal(1.1).pow(getUpgradeCount(this.layer)) },
 			effectDisplay() {return ezEffectDisplay(this.layer, this.id, '', 'x', false)},
 			unlocked() { return hasUpgrade(this.layer, 16) },
