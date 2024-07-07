@@ -13,12 +13,12 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "24w07a",
+	num: "24m07a",
 	name: "Foamy Layer",
 }
 
 let changelog = `<h1>Changelog:</h1><br><br>
-	<h3>24w07a (Foamy Layer)</h3><br>
+	<h3>24m07a (Foamy Layer)</h3><br>
 		- Added quantum foam (QFoam).<br>
 		- Added 3 upgrade rows in QFoam.<br>
 		- Added 2 buyables in QFoam.<br>
