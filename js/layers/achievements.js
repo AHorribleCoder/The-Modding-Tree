@@ -63,7 +63,7 @@ addLayer("Ach", {
 		14: {
 			name: "Quantum Integer Limit",
 			tooltip: "Get 2^32 (4,294,967,296) QFoam.",
-			done() {return player["QFoam"].points.gte(2^32)},
+			done() {return player.points.gte(2**32)},
 			doneTooltip() {return this.tooltip + "</br>+" + format(this.effect) + " AP"},
 			effect: 1
 		},
